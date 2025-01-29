@@ -1,0 +1,12 @@
+[application]
+
+# App (Project) Name
+name = "emoji_picker"
+default_platform = "desktop"
+
+[web.app]
+
+# HTML title tag content
+title = "emoji_picker"
+
+[bundle]
