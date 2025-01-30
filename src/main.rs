@@ -4,7 +4,7 @@ use components::EmojiPicker;
 
 mod components;
 
-const FAVICON: Asset = asset!("/assets/favicon.ico");
+const FAVICON: Asset = asset!("/assets/icon.png");
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
 
 fn main() {
