@@ -34,7 +34,7 @@ pub fn Categories(props: CategoriesProps) -> Element {
                                 key: "{group:?}",
                                 class: "{class}",
                                 onclick: move |_| props.on_select.call(group),
-                                "{icon} {group:?}"
+                                "{icon}"
                             }
                         }
                     })

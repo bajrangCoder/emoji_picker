@@ -5,6 +5,20 @@
 
 A simple emoji picker for desktop using dioxus
 
+## To Do
+
+- [x] Add support for searching emojis
+- [ ] Add better cross platform copy to clipboard support
+- [ ] Add recent emojis section
+- [ ] Add support for skin tone selection
+- [ ] Add support for custom themes
+- [ ] Make things more faster
+
+## Preview
+
+![Preview1](./previews/preview1.png)
+![Preview2](./previews/preview2.png)
+
 ### Serving App
 
 Run the following command in the root of project to start developing with the default platform:

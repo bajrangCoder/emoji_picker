@@ -1,4 +1,7 @@
+use std::time::Duration;
+
 use dioxus::prelude::*;
+use dioxus_sdk::utils::timing::use_debounce;
 use emojis::{Emoji, Group};
 
 #[derive(PartialEq, Props, Clone)]
@@ -9,6 +12,16 @@ pub struct EmojiGridProps {
 
 #[component]
 pub fn EmojiGrid(props: EmojiGridProps) -> Element {
+    let mut show_toast = use_signal(|| false);
+    let mut toast_message = use_signal(|| String::new());
+
+    let mut hide_toast = use_debounce(Duration::from_secs(2), {
+        let mut show_toast = show_toast.clone();
+        move |_| {
+            show_toast.set(false);
+        }
+    });
+
     let emojis = if let Some(results) = &props.search_results {
         results.iter().map(|&e| e).collect::<Vec<_>>()
     } else {
@@ -22,6 +35,9 @@ pub fn EmojiGrid(props: EmojiGridProps) -> Element {
     };
     rsx! {
         div { class: "emoji-grid-container",
+            if show_toast() {
+                div { class: "toast-notification", "{toast_message}" }
+            }
             div { class: "category-title", "{group_name}" }
             div { class: "emoji-grid",
                 {
@@ -35,7 +51,17 @@ pub fn EmojiGrid(props: EmojiGridProps) -> Element {
                                     class: "emoji",
                                     title: "{emoji_str}",
                                     onclick: move |_| {
-                                        println!("Selected emoji: {}", emoji_str);
+                                        if let Ok(mut clipboard) = arboard::Clipboard::new() {
+                                            if let Ok(_) = clipboard.set_text(emoji_str.to_owned()) {
+                                                toast_message.set(format!("Copied {} to clipboard!", emoji_str));
+                                                show_toast.set(true);
+                                                hide_toast.action(());
+                                            } else {
+                                                toast_message.set("Failed to copy emoji".to_string());
+                                                show_toast.set(true);
+                                                hide_toast.action(());
+                                            }
+                                        }
                                     },
                                     "{emoji_str}"
                                 }

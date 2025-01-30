@@ -11,6 +11,10 @@
         --scrollbar-thumb: #cecece;
         --search-bg: #f5f5f5;
         --shadow-color: rgba(0, 0, 0, 0.1);
+        --click-overlay: rgba(0, 0, 0, 0.05);
+        --emoji-fonts: "Segoe UI Emoji", "Apple Color Emoji",
+            "Noto Color Emoji", "EmojiSymbols", "EmojiOne Mozilla",
+            "Twemoji Mozilla", sans-serif;
     }
 }
 
@@ -27,6 +31,10 @@
         --scrollbar-thumb: #505050;
         --search-bg: #2d2d2d;
         --shadow-color: rgba(0, 0, 0, 0.3);
+        --click-overlay: rgba(255, 255, 255, 0.1);
+        --emoji-fonts: "Segoe UI Emoji", "Apple Color Emoji",
+            "Noto Color Emoji", "EmojiSymbols", "EmojiOne Mozilla",
+            "Twemoji Mozilla", sans-serif;
     }
 }
 
@@ -67,7 +75,7 @@ body {
 
 .search-input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 40px 12px 16px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     font-size: 16px;
@@ -82,6 +90,42 @@ body {
     box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
 }
 
+.clear-input {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--secondary-text);
+    color: var(--search-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.clear-button:hover {
+    opacity: 1;
+    color: var(--text-color);
+}
+.clear-input::before,
+.clear-input::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background: currentColor;
+    transform: rotate(45deg);
+}
+
+.clear-input::after {
+    transform: rotate(-45deg);
+}
+
 .categories {
     display: flex;
     padding: 12px 24px;
@@ -89,28 +133,52 @@ body {
     border-bottom: 1px solid var(--border-color);
     background: var(--secondary-bg);
     overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+    display: none;
 }
 
 .category {
-    padding: 10px 20px;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--category-bg);
-    border-radius: 20px;
-    white-space: nowrap;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: var(--secondary-text);
-    font-size: 14px;
+    font-size: 20px;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
 }
 
 .category:hover {
     background: var(--hover-color);
-    color: var(--text-color);
 }
 
 .category.active {
     background: var(--active-color);
-    color: var(--text-color);
-    font-weight: 500;
+    transform: scale(1.1);
+}
+
+.category::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--click-overlay);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.category:active::after {
+    opacity: 1;
 }
 
 .emoji-grid-container {
@@ -133,15 +201,6 @@ body {
     padding: 0 8px;
 }
 
-.emoji-grid::-webkit-scrollbar {
-    width: 8px;
-}
-
-.emoji-grid::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 4px;
-}
-
 .emoji {
     display: flex;
     align-items: center;
@@ -151,6 +210,8 @@ body {
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .emoji:hover {
@@ -158,8 +219,90 @@ body {
     transform: scale(1.1);
 }
 
+.emoji::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--click-overlay);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.emoji:active::after {
+    opacity: 1;
+}
+
+.emoji,
+.category {
+    font-family: var(--emoji-fonts);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .recently-used {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 16px;
     margin-bottom: 16px;
+}
+
+.toast-notification {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    padding: 12px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    z-index: 1000;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(8px);
+    font-family: var(--emoji-fonts);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    animation:
+        toast-slide-up 0.3s ease,
+        toast-fade-out 0.3s ease 1.7s;
+}
+
+.toast-notification::before {
+    content: "📋";
+    font-size: 16px;
+}
+
+@keyframes toast-slide-up {
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes toast-fade-out {
+    from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+}
+
+.toast-notification:hover {
+    background-color: var(--hover-color);
 }

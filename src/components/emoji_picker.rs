@@ -34,6 +34,12 @@ pub fn EmojiPicker() -> Element {
                         value: "{search_query}",
                         oninput: move |event| search_query.set(event.value()),
                     }
+                    div {
+                        class: "clear-input",
+                        role: "button",
+                        "area-label": "Clear search",
+                        onclick: move |_| search_query.set(String::new()),
+                    }
                 }
             }
             Categories {

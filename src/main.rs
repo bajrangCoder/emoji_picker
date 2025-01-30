@@ -12,8 +12,9 @@ fn main() {
     fn launch_app() {
         use dioxus::desktop::tao;
         let window = tao::window::WindowBuilder::new()
-            .with_inner_size(tao::dpi::LogicalSize::new(400.0, 500.0))
-            .with_resizable(true);
+            .with_inner_size(tao::dpi::LogicalSize::new(500.0, 500.0))
+            .with_resizable(true)
+            .with_title("Emoji Picker");
         dioxus::LaunchBuilder::new()
             .with_cfg(
                 dioxus::desktop::Config::new()
