@@ -8,7 +8,7 @@ A simple emoji picker for desktop using dioxus
 ## To Do
 
 - [x] Add support for searching emojis
-- [ ] Add better cross platform copy to clipboard support
+- [x] Add better cross platform copy to clipboard support
 - [ ] Add recent emojis section
 - [ ] Add support for skin tone selection
 - [ ] Add support for custom themes
