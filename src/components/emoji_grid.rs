@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use dioxus::prelude::*;
+use dioxus_clipboard::prelude::use_clipboard;
 use dioxus_sdk::utils::timing::use_debounce;
 use emojis::{Emoji, Group};
 
@@ -51,16 +52,15 @@ pub fn EmojiGrid(props: EmojiGridProps) -> Element {
                                     class: "emoji",
                                     title: "{emoji_str}",
                                     onclick: move |_| {
-                                        if let Ok(mut clipboard) = arboard::Clipboard::new() {
-                                            if let Ok(_) = clipboard.set_text(emoji_str.to_owned()) {
-                                                toast_message.set(format!("Copied {} to clipboard!", emoji_str));
-                                                show_toast.set(true);
-                                                hide_toast.action(());
-                                            } else {
-                                                toast_message.set("Failed to copy emoji".to_string());
-                                                show_toast.set(true);
-                                                hide_toast.action(());
-                                            }
+                                        let mut clipboard = use_clipboard();
+                                        if let Ok(_) = clipboard.set(emoji_str.to_string()) {
+                                            toast_message.set(format!("Copied {} to clipboard!", emoji_str));
+                                            show_toast.set(true);
+                                            hide_toast.action(());
+                                        } else {
+                                            toast_message.set("Failed to copy emoji".to_string());
+                                            show_toast.set(true);
+                                            hide_toast.action(());
                                         }
                                     },
                                     "{emoji_str}"

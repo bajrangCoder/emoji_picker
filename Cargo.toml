@@ -7,8 +7,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-arboard = { version = "3.4.1", features = ["wl-clipboard-rs"] }
 dioxus = { version = "0.6.0", features = [] }
+dioxus-clipboard = "0.2.0"
 dioxus-sdk = { version = "0.6.0", features = ["timing"] }
 emojis = "0.6.4"
 

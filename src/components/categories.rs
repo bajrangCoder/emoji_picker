@@ -28,7 +28,7 @@ pub fn Categories(props: CategoriesProps) -> Element {
                     .map(|(group, icon)| {
                         let is_selected = *group == props.selected_group;
                         let class = if is_selected { "category active" } else { "category" };
-                        let group = group.clone();
+                        let group = *group;
                         rsx! {
                             div {
                                 key: "{group:?}",
